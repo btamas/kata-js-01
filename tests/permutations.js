@@ -40,6 +40,15 @@ var calculatePermutationCount = function( text ) {
 	return fact(text.length) / repeatDivider;
 };
 
+suite('test TestFunctions', function() {
+	test('test calculatePermutationCount', function() {
+		calculatePermutationCount( '' ).should.be.exactly(1);
+		calculatePermutationCount( '12345' ).should.be.exactly(120);
+		calculatePermutationCount( 'a' ).should.be.exactly(1);
+		calculatePermutationCount( 'abb' ).should.be.exactly(3);
+	});
+});
+
 suite('test Permutations', function() {
 	testDataProvider().forEach(function( testCase ) {
 		test('test correct result with "' + testCase[0] + '"', function() {

@@ -44,7 +44,7 @@ function walkDir(dir, action) {
 };
 
 // Loop through all paths in the blanket pattern
-walkDir('libs', function (err, path) {
+walkDir('./libs', function (err, path) {
 	if (err) {
 		console.log(err);
 		return;
