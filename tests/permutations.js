@@ -44,8 +44,13 @@ suite('test Permutations', function() {
 		test('test correct result with "' + testCase[0] + '"', function() {
 			var result = permutations.getPermutations( testCase[0] );
 
+			//check number of the result
 			result.length.should.be.exactly( calculatePermutationCount( testCase[0] ) );
+
+			//check uniquity
 			should( result ).eql( _.uniq(result) );
+
+			//check the same letters
 			result.forEach(function( resultItem ) {
 				should( _.countBy(resultItem.split('')) ).eql( _.countBy(testCase[0].split('')) );
 			});
