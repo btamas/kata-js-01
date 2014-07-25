@@ -25,18 +25,18 @@ var calculatePermutationCount = function( text ) {
 	var countLetters = _.reduce(
 		_.countBy( text.split('') ),
 		function( memo, letterCount ) {
-			memo[letterCount-1] = memo[letterCount-1]+1 || 1;
+			memo[letterCount] = memo[letterCount] + 1 || 1;
 			return memo;
 		},
 		[]
 	);
 
-	var repetable = 1;
+	var repeatDivider = 1;
 	countLetters.forEach(function( frequency, i ) {
-		repetable *= Math.pow( fact( i + 1 ), frequency);
+		repeatDivider *= Math.pow( fact( i ), frequency);
 	});
 
-	return fact(text.length) / repetable;
+	return fact(text.length) / repeatDivider;
 };
 
 suite('test Permutations', function() {
@@ -47,7 +47,7 @@ suite('test Permutations', function() {
 			result.length.should.be.exactly( calculatePermutationCount( testCase[0] ) );
 			should( result ).eql( _.uniq(result) );
 			result.forEach(function( resultItem ) {
-				should( _.countBy(resultItem.split(''))).eql(_.countBy(testCase[0].split('')) );
+				should( _.countBy(resultItem.split('')) ).eql( _.countBy(testCase[0].split('')) );
 			});
 		});
 	});
