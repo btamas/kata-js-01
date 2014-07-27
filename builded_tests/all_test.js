@@ -6,17 +6,19 @@ Permutation.prototype.getPermutations = function getPermutations( text ) {
 };
 
 Permutation.prototype._getPermutations = function _getPermutations( prefix, text ) {
-	var n = text.length;
-	if ( n === 0 ) {
+	if ( text.length === 0 ) {
 		return [ prefix ];
 	}
 	else {
 		var result = [];
-		for( var i=0; i < n; i++ ) {
-			if ( text.indexOf( text[i] ) >= i ) {
-				var p = this._getPermutations( prefix + text[i], text.substr(0, i) + text.substr(i+1) );
-				result = result.concat(p);
+		for( var i=0; i < text.length; i++ ) {
+			//prevent duplications
+			if ( text.indexOf( text[i] ) < i ) {
+				continue;
 			}
+
+			var permutations = this._getPermutations( prefix + text[i], text.substr(0, i) + text.substr(i+1) );
+			result = result.concat(permutations);
 		}
 		return result;
 	}
@@ -5495,30 +5497,20 @@ exports.formatProp = function(name) {
 
 },{}],26:[function(require,module,exports){
 var should = require('should'),
-	_ = require('underscore'),
-	permutations = require('../libs/permutations');
+	_ = require('underscore');
 
-var fact = function fact( n ) {
+var Helpers = function Helpers() {};
+
+Helpers.prototype.factorial = function factorial( n ) {
 	if ( n <= 1 ) {
 		return 1;
 	}
 	else {
-		return fact( n - 1 ) * n;
+		return this.factorial( n - 1 ) * n;
 	}
 };
 
-var testDataProvider = function() {
-	return [
-		[ '1', ['1'] ],
-		[ '', [ '' ] ],
-		[ '123', ['123', '132', '213', '231', '312', '321'] ],
-		[ '212', ['122', '212', '221'] ],
-		[ '11', [ '11' ] ],
-		[ 'alma', [ 'alma', 'alam', 'amla', 'amal', 'aaml', 'aalm', 'maal', 'mala' ] ]
-	];
-}
-
-var calculatePermutationCount = function( text ) {
+Helpers.prototype.calculatePermutationCount = function( text ) {
 	var countLetters = _.reduce(
 		_.countBy( text.split('') ),
 		function( memo, letterCount ) {
@@ -5529,29 +5521,68 @@ var calculatePermutationCount = function( text ) {
 	);
 
 	var repeatDivider = 1;
-	countLetters.forEach(function( frequency, i ) {
-		repeatDivider *= Math.pow( fact( i ), frequency);
-	});
+	countLetters.forEach(_.bind(function( frequency, i ) {
+		repeatDivider *= Math.pow( this.factorial( i ), frequency);
+	},this));
 
-	return fact(text.length) / repeatDivider;
+	return this.factorial(text.length) / repeatDivider;
 };
 
-suite('test TestFunctions', function() {
-	test('test calculatePermutationCount', function() {
-		calculatePermutationCount( '' ).should.be.exactly(1);
-		calculatePermutationCount( '12345' ).should.be.exactly(120);
-		calculatePermutationCount( 'a' ).should.be.exactly(1);
-		calculatePermutationCount( 'abb' ).should.be.exactly(3);
+var helpers = module.exports = new Helpers();
+
+suite('test Factorial', function() {
+	var dataProvider = [
+		[ 0, 1 ],
+		[ 1, 1 ],
+		[ 2, 2 ],
+		[ 3, 6 ],
+		[ 4, 24 ],
+		[ 10, 3628800 ]
+	];
+
+	test('test factorial', function() {
+		dataProvider.forEach(function( testCase ) {
+			helpers.factorial( testCase[0]).should.be.exactly(testCase[1]);
+		});
 	});
 });
 
+suite('test CalculatePermutationCount', function() {
+	var dataProvider = [
+		[ '', 1 ],
+		[ '12345', 120 ],
+		[ 'a', 1 ],
+		[ 'abb', 3 ]
+	];
+
+	test('test calculatePermutationCount', function() {
+		dataProvider.forEach(function( testCase ) {
+			helpers.calculatePermutationCount( testCase[0] ).should.be.exactly( testCase[1]);
+		});
+	});
+});
+},{"should":23,"underscore":25}],27:[function(require,module,exports){
+var should = require('should'),
+	_ = require('underscore'),
+	helpers = require('./helpers'),
+	permutations = require('../libs/permutations');
+
 suite('test Permutations', function() {
-	testDataProvider().forEach(function( testCase ) {
-		test('test correct result with "' + testCase[0] + '"', function() {
+	var testDataProvider = [
+		[ '1', ['1'] ],
+		[ '', [ '' ] ],
+		[ '123', ['123', '132', '213', '231', '312', '321'] ],
+		[ '212', ['122', '212', '221'] ],
+		[ '11', [ '11' ] ],
+		[ 'alma', [ 'alma', 'alam', 'amla', 'amal', 'aaml', 'aalm', 'maal', 'mala' ] ]
+	];
+
+	test('test correct results', function() {
+		testDataProvider.forEach(function( testCase ) {
 			var result = permutations.getPermutations( testCase[0] );
 
 			//check number of the result
-			result.length.should.be.exactly( calculatePermutationCount( testCase[0] ) );
+			result.length.should.be.exactly( helpers.calculatePermutationCount( testCase[0] ) );
 
 			//check uniquity
 			should( result ).eql( _.uniq(result) );
@@ -5563,4 +5594,4 @@ suite('test Permutations', function() {
 		});
 	});
 });
-},{"../libs/permutations":1,"should":23,"underscore":25}]},{},[26]);
+},{"../libs/permutations":1,"./helpers":26,"should":23,"underscore":25}]},{},[26,27]);
