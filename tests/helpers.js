@@ -30,15 +30,36 @@ Helpers.prototype.calculatePermutationCount = function( text ) {
 	return this.factorial(text.length) / repeatDivider;
 };
 
-var helpers = new Helpers();
+var helpers = module.exports = new Helpers();
 
-suite('test TestFunctions', function() {
-	test('test calculatePermutationCount', function() {
-		helpers.calculatePermutationCount( '' ).should.be.exactly(1);
-		helpers.calculatePermutationCount( '12345' ).should.be.exactly(120);
-		helpers.calculatePermutationCount( 'a' ).should.be.exactly(1);
-		helpers.calculatePermutationCount( 'abb' ).should.be.exactly(3);
+suite('test Factorial', function() {
+	var dataProvider = [
+		[ 0, 1 ],
+		[ 1, 1 ],
+		[ 2, 2 ],
+		[ 3, 6 ],
+		[ 4, 24 ],
+		[ 10, 3628800 ]
+	];
+
+	test('test factorial', function() {
+		dataProvider.forEach(function( testCase ) {
+			helpers.factorial( testCase[0]).should.be.exactly(testCase[1]);
+		});
 	});
 });
 
-module.exports = helpers;
+suite('test CalculatePermutationCount', function() {
+	var dataProvider = [
+		[ '', 1 ],
+		[ '12345', 120 ],
+		[ 'a', 1 ],
+		[ 'abb', 3 ]
+	];
+
+	test('test calculatePermutationCount', function() {
+		dataProvider.forEach(function( testCase ) {
+			helpers.calculatePermutationCount( testCase[0] ).should.be.exactly( testCase[1]);
+		});
+	});
+});
