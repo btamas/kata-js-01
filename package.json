@@ -9,6 +9,13 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha -u tdd tests/*"
   },
+	"config": {
+		"blanket": {
+			"pattern": "/libs",
+			"data-cover-never": "node_modules",
+			"data-cover-flags": "branchTracking"
+		}
+	},
   "author": "",
   "license": "ISC",
   "dependencies": {

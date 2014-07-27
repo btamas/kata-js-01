@@ -1,15 +1,7 @@
 var should = require('should'),
 	_ = require('underscore'),
+	helpers = require('./helpers'),
 	permutations = require('../libs/permutations');
-
-var fact = function fact( n ) {
-	if ( n <= 1 ) {
-		return 1;
-	}
-	else {
-		return fact( n - 1 ) * n;
-	}
-};
 
 var testDataProvider = function() {
 	return [
@@ -20,34 +12,7 @@ var testDataProvider = function() {
 		[ '11', [ '11' ] ],
 		[ 'alma', [ 'alma', 'alam', 'amla', 'amal', 'aaml', 'aalm', 'maal', 'mala' ] ]
 	];
-}
-
-var calculatePermutationCount = function( text ) {
-	var countLetters = _.reduce(
-		_.countBy( text.split('') ),
-		function( memo, letterCount ) {
-			memo[letterCount] = memo[letterCount] + 1 || 1;
-			return memo;
-		},
-		[]
-	);
-
-	var repeatDivider = 1;
-	countLetters.forEach(function( frequency, i ) {
-		repeatDivider *= Math.pow( fact( i ), frequency);
-	});
-
-	return fact(text.length) / repeatDivider;
 };
-
-suite('test TestFunctions', function() {
-	test('test calculatePermutationCount', function() {
-		calculatePermutationCount( '' ).should.be.exactly(1);
-		calculatePermutationCount( '12345' ).should.be.exactly(120);
-		calculatePermutationCount( 'a' ).should.be.exactly(1);
-		calculatePermutationCount( 'abb' ).should.be.exactly(3);
-	});
-});
 
 suite('test Permutations', function() {
 	testDataProvider().forEach(function( testCase ) {
@@ -55,7 +20,7 @@ suite('test Permutations', function() {
 			var result = permutations.getPermutations( testCase[0] );
 
 			//check number of the result
-			result.length.should.be.exactly( calculatePermutationCount( testCase[0] ) );
+			result.length.should.be.exactly( helpers.calculatePermutationCount( testCase[0] ) );
 
 			//check uniquity
 			should( result ).eql( _.uniq(result) );
