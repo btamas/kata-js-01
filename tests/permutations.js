@@ -1,6 +1,6 @@
 var should = require('should'),
 	_ = require('underscore'),
-	helpers = require('./helpers'),
+	helpers = require('./helpers/helpers'),
 	permutations = require('../libs/permutations');
 
 suite('test Permutations', function() {

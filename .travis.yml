@@ -3,6 +3,6 @@ language: node_js
 node_js:
   - 0.10
 
-addons:
-    code_climate:
-        repo_token: f55cbfc6106a68d8bebb740845a4db2984fba0e591f6109132c2b52b6443c729
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
