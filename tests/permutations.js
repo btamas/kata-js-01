@@ -7,7 +7,8 @@ suite('test Permutations', function() {
 	test('test correct results', function() {
 		var testDataProvider = [
 			'1', '', '123', '212', '11', 'alma',
-			'123456', '112122'
+			'1234567', '1121221', '000000000',
+			'312123'
 		];
 
 		testDataProvider.forEach(function( testCase ) {
