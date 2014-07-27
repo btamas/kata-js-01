@@ -4,12 +4,12 @@ var should = require('should'),
 	permutations = require('../libs/permutations');
 
 suite('test Permutations', function() {
-	var testDataProvider = [
-		'1', '', '123', '212', '11', 'alma',
-		'123456', '112122'
-	];
-
 	test('test correct results', function() {
+		var testDataProvider = [
+			'1', '', '123', '212', '11', 'alma',
+			'123456', '112122'
+		];
+
 		testDataProvider.forEach(function( testCase ) {
 			var result = permutations.getPermutations( testCase );
 
