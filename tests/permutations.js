@@ -5,27 +5,23 @@ var should = require('should'),
 
 suite('test Permutations', function() {
 	var testDataProvider = [
-		[ '1', ['1'] ],
-		[ '', [ '' ] ],
-		[ '123', ['123', '132', '213', '231', '312', '321'] ],
-		[ '212', ['122', '212', '221'] ],
-		[ '11', [ '11' ] ],
-		[ 'alma', [ 'alma', 'alam', 'amla', 'amal', 'aaml', 'aalm', 'maal', 'mala' ] ]
+		'1', '', '123', '212', '11', 'alma',
+		'123456', '112122'
 	];
 
 	test('test correct results', function() {
 		testDataProvider.forEach(function( testCase ) {
-			var result = permutations.getPermutations( testCase[0] );
+			var result = permutations.getPermutations( testCase );
 
 			//check number of the result
-			result.length.should.be.exactly( helpers.calculatePermutationCount( testCase[0] ) );
+			result.length.should.be.exactly( helpers.calculatePermutationCount( testCase ) );
 
 			//check uniquity
 			should( result ).eql( _.uniq(result) );
 
 			//check the same letters
 			result.forEach(function( resultItem ) {
-				should( _.countBy(resultItem.split('')) ).eql( _.countBy(testCase[0].split('')) );
+				should( _.countBy(resultItem.split('')) ).eql( _.countBy(testCase.split('')) );
 			});
 		});
 	});
